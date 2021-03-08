@@ -100,7 +100,7 @@ while True:
 			active_screen = 1
 			count_right = 0
 
-	screen.fill((0, 100, 255))
+	screen.fill((255, 255, 255))
 
 	# buttoms and active color
 	button(screen, "Letters", (0, 255, 0) if active_screen == 0 else (111, 111, 111), 
