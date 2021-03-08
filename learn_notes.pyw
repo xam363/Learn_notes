@@ -45,32 +45,18 @@ def note_flat(screen, note, rect):
 		)
 
 		# bottom lines
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*4.5+10), 
-			(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*4.5+10), 2
-		)
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*5.5+10), 
-			(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*5.5+10), 2
-		)
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*6.5+10), 
-			(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*6.5+10), 2
-		)
+		for i in range(3):
+			pygame.draw.line(screen, (0, 0, 0), 
+				(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*(4.5+i)+10), 
+				(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*(4.5+i)+10), 2
+			)
 
 		# top lines
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-15, rect[1]-width_gap*1.5+10), 
-			(rect[0]+WIDTH/2+30, rect[1]-width_gap*1.5+10), 2
-		)
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-15, rect[1]-width_gap*2.5+10), 
-			(rect[0]+WIDTH/2+30, rect[1]-width_gap*2.5+10), 2
-		)
-		pygame.draw.line(screen, (0, 0, 0), 
-			(rect[0]+WIDTH/2-15, rect[1]-width_gap*3.5+10), 
-			(rect[0]+WIDTH/2+30, rect[1]-width_gap*3.5+10), 2
-		)
+		for i in range(3):
+			pygame.draw.line(screen, (0, 0, 0), 
+				(rect[0]+WIDTH/2-15, rect[1]-width_gap*(1.5+i)+10), 
+				(rect[0]+WIDTH/2+30, rect[1]-width_gap*(1.5+i)+10), 2
+			)
 
 	# draw lines
 	for i in range(5):
