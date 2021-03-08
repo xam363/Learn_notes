@@ -4,6 +4,7 @@ pygame.init()
 
 WIDTH, HEIGHT = 640, 480
 screen = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
+pygame.display.set_caption("Learn notes")
 
 typed_key = ""
 notes = "ABCDEFG"
