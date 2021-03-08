@@ -1,2 +1,1 @@
-# Learn_notes
- Note trainer
+Note trainer
