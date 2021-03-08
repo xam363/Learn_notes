@@ -28,57 +28,42 @@ def button(screen, _text, color, rect):
 	size = rect[2] // len(_text)
 	text(screen, _text, (rect[0], rect[1]), (0, 0, 0), size)
 
-def note_flat(screen, note, rect):
+def draw_note(screen, shift, rect):
 	width_gap = rect[3] // 5
-	def draw_note(shift):
-		# bottom note
-		pygame.draw.ellipse(screen, (255, 0, 0), 
-			(rect[0]+WIDTH/2-100, rect[1]+width_gap*(6.5+shift), 20, 20)
-		)
-		# middle note
-		pygame.draw.ellipse(screen, (255, 0, 0), 
-			(rect[0]+WIDTH/2-50, rect[1]+width_gap*(3+shift), 20, 20)
-		)
-		# top note
-		pygame.draw.ellipse(screen, (255, 0, 0), 
-			(rect[0]+WIDTH/2, rect[1]-width_gap*(0.5 - shift), 20, 20)
-		)
+	# bottom note
+	pygame.draw.ellipse(screen, (255, 0, 0), 
+		(rect[0]+WIDTH/2-100, rect[1]+width_gap*(6.5+shift), 20, 20)
+	)
+	# middle note
+	pygame.draw.ellipse(screen, (255, 0, 0), 
+		(rect[0]+WIDTH/2-50, rect[1]+width_gap*(3+shift), 20, 20)
+	)
+	# top note
+	pygame.draw.ellipse(screen, (255, 0, 0), 
+		(rect[0]+WIDTH/2, rect[1]-width_gap*(0.5 - shift), 20, 20)
+	)
 
-		# bottom lines
-		for i in range(3):
-			pygame.draw.line(screen, (0, 0, 0), 
-				(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*(4.5+i)+10), 
-				(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*(4.5+i)+10), 2
-			)
-
-		# top lines
-		for i in range(3):
-			pygame.draw.line(screen, (0, 0, 0), 
-				(rect[0]+WIDTH/2-15, rect[1]-width_gap*(1.5+i)+10), 
-				(rect[0]+WIDTH/2+30, rect[1]-width_gap*(1.5+i)+10), 2
-			)
-
-	# draw lines
+def draw_flat(screen, note, rect):
+	width_gap = rect[3] // 5
+	# bottom lines
+	for i in range(3):
+		pygame.draw.line(screen, (0, 0, 0), 
+			(rect[0]+WIDTH/2-100-15, rect[1]+width_gap*(4.5+i)+10), 
+			(rect[0]+WIDTH/2-100+30, rect[1]+width_gap*(4.5+i)+10), 2
+		)
+	# top lines
+	for i in range(3):
+		pygame.draw.line(screen, (0, 0, 0), 
+			(rect[0]+WIDTH/2-15, rect[1]-width_gap*(1.5+i)+10), 
+			(rect[0]+WIDTH/2+30, rect[1]-width_gap*(1.5+i)+10), 2
+		)
+	# draw middle lines
 	for i in range(5):
 		pygame.draw.line(screen, (0, 0, 0), 
 			(rect[0], rect[1]+width_gap*i), 
 			(rect[0]+rect[2], rect[1]+width_gap*i), 2
 		)
-
-	if note == "F":
-		draw_note(0)
-	elif note == "G":
-		draw_note(-0.5)
-	elif note == "A":
-		draw_note(-1)
-	elif note == "B":
-		draw_note(-1.5)
-	elif note == "C":
-		draw_note(-2)
-	elif note == "D":
-		draw_note(-2.5)
-	elif note == "E":
-		draw_note(-3)
+	draw_note(screen, "FGABCDE".index(note)*-0.5, rect)
 
 while True:
 	for event in pygame.event.get():
@@ -100,7 +85,6 @@ while True:
 				typed_key = "F"
 			elif event.key == pygame.K_g:
 				typed_key = "G"
-
 		if (pygame.mouse.get_pressed()[0] and 
 				pygame.mouse.get_pos()[0] > 0 and 
 				pygame.mouse.get_pos()[0] < 100 and 
@@ -108,7 +92,6 @@ while True:
 				pygame.mouse.get_pos()[1] < 480):
 			active_screen = 0
 			count_right = 0
-
 		if (pygame.mouse.get_pressed()[0] and 
 				pygame.mouse.get_pos()[0] > 110 and 
 				pygame.mouse.get_pos()[0] < 210 and 
@@ -120,14 +103,12 @@ while True:
 	screen.fill((0, 100, 255))
 
 	# buttoms and active color
-	if active_screen == 0:
-		button(screen, "Letters", (0, 255, 0), (0, 450, 100, 30))
-	else:
-		button(screen, "Letters", (111, 111, 111), (0, 450, 100, 30))
-	if active_screen == 1:
-		button(screen, "Notes", (0, 255, 0), (110, 450, 100, 30))
-	else:
-		button(screen, "Notes", (111, 111, 111), (110, 450, 100, 30))
+	button(screen, "Letters", (0, 255, 0) if active_screen == 0 else (111, 111, 111), 
+		  (0, 450, 100, 30)
+	)
+	button(screen, "Notes", (0, 255, 0) if active_screen == 1 else (111, 111, 111), 
+		(110, 450, 100, 30)
+	)
 
 	# show notes letter
 	if active_screen == 0:
@@ -149,7 +130,7 @@ while True:
 			count_right += 1
 			random_note = random.randint(0, 6)
 		text(screen,  "Right: " + str(count_right), (0, 0), (0, 255, 0), 50)
-		note_flat(screen, notes[random_note], (0, 200, WIDTH, 100))
+		draw_flat(screen, notes[random_note], (0, 200, WIDTH, 100))
 
 	# update
 	pygame.display.update()
