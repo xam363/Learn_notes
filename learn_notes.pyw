@@ -42,31 +42,31 @@ class Button:
 
 pygame.init()
 
+# common variables
 WIDTH, HEIGHT = 640, 480
 screen = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption("Learn notes")
-
+clock = pygame.time.Clock()
+active_screen = 0 # screen for show
 typed_key = ""
 notes = "ABCDEFG"
-showed_text = ""
 random_note = random.randint(0, 6)
+count_right = 0
+
+#first screen variables
+showed_text = ""
 shift_note = random.choice([-3, -2, -1, 1, 2, 3])
 target_note = (random_note + shift_note) % 7
-count_right = 0
+
+#second screen variables
 hard_mode_roll = random.randint(0, 2)
-
-
-active_screen = 0 # screen for show
 
 # buttons
 buttons = []
 buttons.append(Button(screen, "Letters", (111, 111, 111), (0, 450, 100, 30)))
 buttons[0].pushed = True
 buttons.append(Button(screen, "Notes", (111, 111, 111), (110, 450, 100, 30)))
-
 hard_mode_button = (Button(screen, "Hard", (111, 111, 111), (110, 415, 100, 30)))
-
-
 
 def text(screen, text, xy, color, size):
 	""" screen, showed text, (x, y), color, size"""
@@ -74,10 +74,10 @@ def text(screen, text, xy, color, size):
 	textsurface = font.render(text, False, color)
 	screen.blit(textsurface, (xy))
 
-
-def draw_random_note(screen, note, rect, _hard_mode, roll):
+def draw_random_notes(screen, note, rect, _hard_mode, roll):
 	width_gap = rect[3] // 5
 	shift = "FGABCDE".index(note)*-0.5
+	# draw 3 notes
 	if not _hard_mode:
 		# bottom note
 		pygame.draw.ellipse(screen, (255, 0, 0), 
@@ -91,10 +91,23 @@ def draw_random_note(screen, note, rect, _hard_mode, roll):
 		pygame.draw.ellipse(screen, (255, 0, 0), 
 			(rect[0]+WIDTH/2, rect[1]-width_gap*(0.5 - shift), 20, 20)
 		)
+	# draw 1 note
 	elif _hard_mode:
-		pygame.draw.ellipse(screen, (255, 0, 0), 
-			(rect[0]+WIDTH/2-50*roll, rect[1]+width_gap*(abs(-0.5+roll*3.5)+shift), 20, 20)
-		)
+		if roll == 0:
+			# bottom note
+			pygame.draw.ellipse(screen, (255, 0, 0), 
+				(rect[0]+WIDTH/2-100, rect[1]+width_gap*(6.5+shift), 20, 20)
+			)
+		elif roll == 1:
+			# middle note
+			pygame.draw.ellipse(screen, (255, 0, 0), 
+				(rect[0]+WIDTH/2-50, rect[1]+width_gap*(3+shift), 20, 20)
+			)
+		elif roll == 2:
+			# top note
+			pygame.draw.ellipse(screen, (255, 0, 0), 
+				(rect[0]+WIDTH/2, rect[1]-width_gap*(0.5 - shift), 20, 20)
+			)
 
 def draw_flat(screen, note, rect):
 	width_gap = rect[3] // 5
@@ -118,9 +131,8 @@ def draw_flat(screen, note, rect):
 			(rect[0]+rect[2], rect[1]+width_gap*i), 2
 		)
 
-	
-
 while True:
+	clock.tick(10)
 	screen.fill((255, 255, 255))
 	
 	# check events
@@ -151,14 +163,14 @@ while True:
 			buttons[active_screen].pushed = False
 			active_screen = index
 
-
 	# show fris screen
 	if active_screen == 0:
 		if typed_key == notes[target_note]:
 			count_right += 1
-			random_note = random.randint(0, 6)
-			shift_note = random.choice([-3, -2, -1, 1, 2, 3])
-			target_note = (random_note + shift_note) % 7
+			while typed_key == notes[target_note]:
+				random_note = random.randint(0, 6)
+				shift_note = random.choice([-3, -2, -1, 1, 2, 3])
+				target_note = (random_note + shift_note) % 7
 		if shift_note > 0:
 			showed_text = notes[random_note] + ("+" * shift_note)
 		else:
@@ -172,14 +184,13 @@ while True:
 		hard_mode_button.check_push(True)
 		if typed_key == notes[random_note]:
 			count_right += 1
-			random_note = random.randint(0, 6)
-			hard_mode_roll = random.randint(0, 2)
+			while typed_key == notes[random_note]:
+				random_note = random.randint(0, 6)
+				hard_mode_roll = random.randint(0, 2)
 		text(screen,  "Right: " + str(count_right), (0, 0), (0, 255, 0), 50)
 		draw_flat(screen, notes[random_note], (0, 200, WIDTH, 100))
-		draw_random_note(screen, notes[random_note], (0, 200, WIDTH, 100), 
+		draw_random_notes(screen, notes[random_note], (0, 200, WIDTH, 100), 
 						 hard_mode_button.pushed, hard_mode_roll)
 
 	# update
 	pygame.display.update()
-
-		
